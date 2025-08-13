@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>💡 Tablero de Ideas Anónimas</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>💡 Tablero de <span class="resaltado">Ideas Anónimas</span></h1>
+
+    <form id="formIdea">
+      <input
+        type="text"
+        id="idea"
+        placeholder="💬 Escribe tu idea..."
+        required
+        autocomplete="off"
+      />
+      <button type="submit" class="btn-enviar">
+        <i class="fas fa-paper-plane"></i> Enviar
+      </button>
+    </form>
+    <ul id="listaIdeas"></ul>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
