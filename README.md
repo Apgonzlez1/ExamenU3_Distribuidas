@@ -1,6 +1,6 @@
-# Examen Unidad 3 - Proyecto Distribuidas | Programación Avanzada 202550
+# Examen Unidad 3 - Proyecto Distribuidas 
 
-Este repositorio contiene la solución al **Examen Práctico de la Unidad 3** para la asignatura **Programación Avanzada 202550**.  
+Este repositorio contiene la solución al **Examen Práctico de la Unidad 3** 
 El proyecto consiste en implementar un backend funcional con OAuth 2.0, JWT para gestión de sesiones y comunicación en tiempo real con Socket.io, desplegado en un servicio en la nube.
 
 ---
@@ -54,9 +54,6 @@ ExamenU3/
 ├── server.js # Archivo principal backend
 └── README.md # Este archivo
 
-yaml
-Copiar
-Editar
 
 ---
 
@@ -114,7 +111,7 @@ GitHub: [@Apgonzlez1](https://github.com/Apgonzlez1)
 
 ## 📚 Asignatura
 
-Programación Avanzada 202550  
+
 Unidad 3 - Examen Práctico - Ciclo DevOps  
 
 ---
