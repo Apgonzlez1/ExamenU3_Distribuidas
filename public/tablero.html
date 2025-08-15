@@ -6,8 +6,28 @@
   <title>💡 Tablero de Ideas Anónimas</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <style>
+    .logout-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .logout-btn:hover {
+      background-color: #c0392b;
+    }
+  </style>
 </head>
 <body>
+  <button class="logout-btn" onclick="cerrarSesion()">Cerrar sesión</button>
+
   <div class="container">
     <h1>💡 Tablero de <span class="resaltado">Ideas Anónimas</span></h1>
 
@@ -28,5 +48,10 @@
 
   <script src="/socket.io/socket.io.js"></script>
   <script src="script.js"></script>
+  <script>
+    function cerrarSesion() {
+      window.location.href = '/logout';
+    }
+  </script>
 </body>
 </html>
