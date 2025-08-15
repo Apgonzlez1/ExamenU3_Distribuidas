@@ -3,18 +3,699 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Login - Tablero de Ideas</title>
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <title>💡 Tablero de Ideas Anónimas</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    /* Reset y variables CSS */
+    :root {
+      --primary-color: #6366f1;
+      --secondary-color: #8b5cf6;
+      --accent-color: #f59e0b;
+      --success-color: #10b981;
+      --danger-color: #ef4444;
+      --text-dark: #1f2937;
+      --text-light: #6b7280;
+      --bg-light: #f8fafc;
+      --bg-card: #ffffff;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+      --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+      --border-radius: 12px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Animación de fondo */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 30%, rgba(255,255,255,0.1) 70%, transparent 70%),
+                  linear-gradient(-45deg, transparent 30%, rgba(255,255,255,0.05) 30%, rgba(255,255,255,0.05) 70%, transparent 70%);
+      background-size: 60px 60px;
+      animation: moveBackground 20s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes moveBackground {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(60px, 60px); }
+    }
+
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logout-btn {
+      background: linear-gradient(135deg, var(--danger-color), #dc2626);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: var(--shadow-md);
+    }
+
+    .logout-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .logout-btn:active {
+      transform: translateY(0);
+    }
+
+    /* Container principal */
+    .main-container {
+      padding: 120px 2rem 2rem;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 3rem;
+      border-radius: 24px;
+      box-shadow: var(--shadow-xl);
+      width: 100%;
+      max-width: 600px;
+      animation: slideUp 0.6s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .title {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .title h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+    }
+
+    .title p {
+      color: var(--text-light);
+      font-size: 1.1rem;
+    }
+
+    /* Formulario */
+    .form-container {
+      margin-bottom: 3rem;
+    }
+
+    #formIdea {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    #idea {
+      flex: 1;
+      padding: 1rem 1.5rem;
+      border: 2px solid #e5e7eb;
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      background: white;
+      transition: var(--transition);
+      outline: none;
+    }
+
+    #idea:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .btn-enviar {
+      background: linear-gradient(135deg, var(--success-color), #059669);
+      color: white;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: var(--shadow-md);
+      min-width: 120px;
+      justify-content: center;
+    }
+
+    .btn-enviar:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .btn-enviar:active {
+      transform: translateY(0);
+    }
+
+    .btn-enviar:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Estadísticas */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+      padding: 1.5rem;
+      border-radius: var(--border-radius);
+      text-align: center;
+      border: 1px solid rgba(99, 102, 241, 0.2);
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      display: block;
+    }
+
+    .stat-label {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      margin-top: 0.25rem;
+    }
+
+    /* Lista de ideas */
+    .ideas-section h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    #listaIdeas {
+      list-style: none;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .idea-item {
+      background: white;
+      padding: 1.5rem;
+      border-radius: var(--border-radius);
+      border-left: 4px solid var(--accent-color);
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+      animation: fadeInUp 0.5s ease-out forwards;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .idea-item:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .idea-content {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .idea-icon {
+      font-size: 1.5rem;
+      color: var(--accent-color);
+      margin-top: 0.25rem;
+    }
+
+    .idea-text {
+      flex: 1;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--text-dark);
+      word-wrap: break-word;
+    }
+
+    .idea-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1rem;
+      font-size: 0.8rem;
+      color: var(--text-light);
+    }
+
+    .idea-time {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    /* Estados vacíos */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--text-light);
+    }
+
+    .empty-state i {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    .empty-state h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-dark);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 1rem;
+      }
+
+      .main-container {
+        padding: 100px 1rem 1rem;
+      }
+
+      .container {
+        padding: 2rem;
+        border-radius: 16px;
+      }
+
+      .title h1 {
+        font-size: 2rem;
+      }
+
+      #formIdea {
+        flex-direction: column;
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .logout-btn span {
+        display: none;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .title h1 {
+        font-size: 1.8rem;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Animaciones adicionales */
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.7;
+      }
+    }
+
+    /* Loading spinner */
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>💡 Tablero de <span class="resaltado">Ideas Anónimas</span></h1>
-    <div id="login">
-      <a href="/auth/google" class="btn-google">
-        <i class="fab fa-google"></i> Iniciar sesión con Google
-      </a>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">
+      <i class="fas fa-lightbulb"></i>
+      <span>Ideas Board</span>
+    </div>
+    <button class="logout-btn" onclick="cerrarSesion()">
+      <i class="fas fa-sign-out-alt"></i>
+      <span>Cerrar sesión</span>
+    </button>
+  </nav>
+
+  <!-- Container principal -->
+  <div class="main-container">
+    <div class="container">
+      <!-- Título -->
+      <div class="title">
+        <h1>💡 Tablero de Ideas Anónimas</h1>
+        <p>Comparte tus ideas de forma anónima y colabora con otros</p>
+      </div>
+
+      <!-- Formulario -->
+      <div class="form-container">
+        <form id="formIdea">
+          <input
+            type="text"
+            id="idea"
+            placeholder="💬 Escribe tu idea aquí..."
+            required
+            autocomplete="off"
+            maxlength="280"
+          />
+          <button type="submit" class="btn-enviar" id="submitBtn">
+            <i class="fas fa-paper-plane"></i>
+            <span>Enviar</span>
+          </button>
+        </form>
+        <div id="charCounter" style="text-align: right; color: #6b7280; font-size: 0.8rem; margin-top: 0.5rem;">
+          0 / 280 caracteres
+        </div>
+      </div>
+
+      <!-- Estadísticas -->
+      <div class="stats">
+        <div class="stat-card">
+          <span class="stat-number" id="totalIdeas">0</span>
+          <div class="stat-label">Ideas totales</div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number" id="ideasHoy">0</span>
+          <div class="stat-label">Ideas hoy</div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number" id="usuariosActivos">1</span>
+          <div class="stat-label">Usuarios activos</div>
+        </div>
+      </div>
+
+      <!-- Lista de ideas -->
+      <div class="ideas-section">
+        <h2>
+          <i class="fas fa-comments"></i>
+          Ideas recientes
+        </h2>
+        <ul id="listaIdeas">
+          <!-- Las ideas se cargarán aquí dinámicamente -->
+        </ul>
+        <div id="emptyState" class="empty-state" style="display: none;">
+          <i class="fas fa-lightbulb"></i>
+          <h3>¡Sé el primero en compartir una idea!</h3>
+          <p>Las ideas aparecerán aquí cuando las compartas</p>
+        </div>
+      </div>
     </div>
   </div>
+
+  <!-- Scripts -->
+  <script>
+    // Simulación de datos y funcionalidad
+    let ideas = [];
+    let ideasCount = 0;
+
+    // Referencias a elementos DOM
+    const formIdea = document.getElementById('formIdea');
+    const inputIdea = document.getElementById('idea');
+    const listaIdeas = document.getElementById('listaIdeas');
+    const emptyState = document.getElementById('emptyState');
+    const submitBtn = document.getElementById('submitBtn');
+    const charCounter = document.getElementById('charCounter');
+    const totalIdeasEl = document.getElementById('totalIdeas');
+    const ideasHoyEl = document.getElementById('ideasHoy');
+
+    // Contador de caracteres
+    inputIdea.addEventListener('input', function() {
+      const length = this.value.length;
+      charCounter.textContent = `${length} / 280 caracteres`;
+      
+      if (length > 250) {
+        charCounter.style.color = '#ef4444';
+      } else if (length > 200) {
+        charCounter.style.color = '#f59e0b';
+      } else {
+        charCounter.style.color = '#6b7280';
+      }
+    });
+
+    // Envío del formulario
+    formIdea.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const ideaText = inputIdea.value.trim();
+      if (!ideaText) return;
+
+      // Mostrar estado de carga
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<div class="spinner"></div><span>Enviando...</span>';
+
+      // Simular envío
+      setTimeout(() => {
+        agregarIdea(ideaText);
+        inputIdea.value = '';
+        charCounter.textContent = '0 / 280 caracteres';
+        charCounter.style.color = '#6b7280';
+        
+        // Restaurar botón
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i><span>Enviar</span>';
+      }, 1000);
+    });
+
+    // Función para agregar una nueva idea
+    function agregarIdea(texto) {
+      const idea = {
+        id: Date.now(),
+        texto: texto,
+        timestamp: new Date(),
+        animacionDelay: ideas.length * 100
+      };
+
+      ideas.unshift(idea);
+      ideasCount++;
+      
+      actualizarUI();
+      mostrarIdea(idea, true);
+    }
+
+    // Función para mostrar una idea en la lista
+    function mostrarIdea(idea, esNueva = false) {
+      const li = document.createElement('li');
+      li.className = 'idea-item';
+      if (esNueva) {
+        li.style.animationDelay = '0ms';
+      }
+
+      const timeAgo = formatearTiempo(idea.timestamp);
+      
+      li.innerHTML = `
+        <div class="idea-content">
+          <div class="idea-icon">💭</div>
+          <div class="idea-text">${escapeHtml(idea.texto)}</div>
+        </div>
+        <div class="idea-meta">
+          <div class="idea-time">
+            <i class="fas fa-clock"></i>
+            <span>${timeAgo}</span>
+          </div>
+        </div>
+      `;
+
+      if (esNueva) {
+        listaIdeas.insertBefore(li, listaIdeas.firstChild);
+        // Trigger reflow para la animación
+        li.offsetHeight;
+        li.style.animation = 'fadeInUp 0.5s ease-out forwards';
+      } else {
+        listaIdeas.appendChild(li);
+      }
+    }
+
+    // Función para actualizar la UI
+    function actualizarUI() {
+      totalIdeasEl.textContent = ideasCount;
+      ideasHoyEl.textContent = contarIdeasHoy();
+      
+      if (ideas.length === 0) {
+        emptyState.style.display = 'block';
+        listaIdeas.style.display = 'none';
+      } else {
+        emptyState.style.display = 'none';
+        listaIdeas.style.display = 'grid';
+      }
+    }
+
+    // Función para contar ideas de hoy
+    function contarIdeasHoy() {
+      const hoy = new Date();
+      hoy.setHours(0, 0, 0, 0);
+      
+      return ideas.filter(idea => {
+        const fechaIdea = new Date(idea.timestamp);
+        fechaIdea.setHours(0, 0, 0, 0);
+        return fechaIdea.getTime() === hoy.getTime();
+      }).length;
+    }
+
+    // Función para formatear tiempo transcurrido
+    function formatearTiempo(timestamp) {
+      const ahora = new Date();
+      const diferencia = ahora - timestamp;
+      const minutos = Math.floor(diferencia / 60000);
+      
+      if (minutos < 1) return 'Ahora mismo';
+      if (minutos < 60) return `Hace ${minutos}m`;
+      
+      const horas = Math.floor(minutos / 60);
+      if (horas < 24) return `Hace ${horas}h`;
+      
+      const dias = Math.floor(horas / 24);
+      return `Hace ${dias}d`;
+    }
+
+    // Función para escapar HTML
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Función para cerrar sesión
+    function cerrarSesion() {
+      if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+        // Simular cierre de sesión
+        window.location.href = '/logout';
+      }
+    }
+
+    // Actualizar tiempo cada minuto
+    setInterval(() => {
+      const timeElements = document.querySelectorAll('.idea-time span');
+      timeElements.forEach((el, index) => {
+        if (ideas[index]) {
+          el.textContent = formatearTiempo(ideas[index].timestamp);
+        }
+      });
+    }, 60000);
+
+    // Inicializar con algunas ideas de ejemplo
+    setTimeout(() => {
+      const ideasEjemplo = [
+        "¿Qué tal si creamos una app para compartir libros entre vecinos?",
+        "Una plataforma para conectar personas que quieren aprender idiomas",
+        "Un sistema de puntos para incentivar el reciclaje en la ciudad"
+      ];
+
+      ideasEjemplo.forEach((texto, index) => {
+        setTimeout(() => {
+          const idea = {
+            id: Date.now() + index,
+            texto: texto,
+            timestamp: new Date(Date.now() - (index + 1) * 3600000), // Horas atrás
+            animacionDelay: index * 200
+          };
+          ideas.push(idea);
+          ideasCount++;
+          mostrarIdea(idea);
+          actualizarUI();
+        }, index * 500);
+      });
+    }, 1000);
+
+    // Inicializar UI
+    actualizarUI();
+
+    // Auto-focus en el input
+    setTimeout(() => {
+      inputIdea.focus();
+    }, 500);
+  </script>
 </body>
 </html>
