@@ -107,3 +107,9 @@ const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`🚀 Servidor en http://localhost:${PORT}`);
 });
+app.get('/logout', (req, res) => {
+  res.clearCookie('token'); // Borra cookie JWT
+  req.logout(() => {
+    res.redirect('/');
+  });
+});
