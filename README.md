@@ -78,8 +78,8 @@ ExamenU3/
 
 ## 🌐 URLs públicas
 
-- Backend desplegado (Railway): [https://tu-backend-railway-url.app](https://tu-backend-railway-url.app)  
-- Frontend (si aplica): [https://tu-frontend-url.netlify.app](https://tu-frontend-url.netlify.app)
+- Backend desplegado (Render): [[https://tu-backend-railway-url.app](https://tu-backend-railway-url.app](https://examenu3-distribuidas.onrender.com)  
+
 
 ---
 
